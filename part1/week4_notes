@@ -1,0 +1,221 @@
+linear-time selection; graphs, cuts, and the contraction algorithm
+
+problem of computing the ith smallest element of an input array. it's easy to solve in O(nlogn) time using sorting, but we cna do better.
+
+median selection being a special case.
+
+linearity of expectations
+
+hw4 with 5 questions, programming assignment 4 with the contraction algorithm
+
+input array A with n distinct numbers and a number
+
+output the ith smallest element of the array
+
+median
+
+n = n+1/2 for n odd
+n = n/2 for n even
+
+reduction to sorting
+
+1. apply mergesort
+2. return ith element of sorted array
+
+reduction - solve one problem by reducing it to another problem we know how to solve
+
+can't sort any faster. O(n) time randomized by modifying quicksort
+
+pivot = median of medians
+
+partition is arrangement around the pivot element, rearrange less than pivot to left of pivot, greater than pivot to right of pivot
+
+quiz: 5th order statistic in an input array of length 10
+
+partition and pivot ends up in the 3rd position of the partitioned array
+
+on which side of the pivot to recurse, and what order statistic should we look for?
+
+right side of pivot, look on the 2nd order statistic on the right side of te pivot
+
+RSelect(array A, length n, order statistic i)
+
+0. if n = 1, return A[1]
+1. choose pivot p from A uniformly at random
+2. partition A around p, let j= new index of p
+3. if j = 1 return p
+4. if j > i return RSelect(1st part of A, j-1, i)
+5. if j < i return RSelect(2nd part of A, n-j, i-j)
+
+Running time? depends on the quality of pivot choices
+
+1 2 3 4 5 6
+
+Theta(n^2) time
+
+suppose you choose minimum element as pivot every time.
+
+pivots with middle value, as close to median as possible, as most balanced split possible.
+
+T(n) <= T(n/2) + O(n) linear time for partitioning
+
+case 2 of the master method, linear time
+
+With random pivots, same as quicksort the random pivot is as good as the even split
+
+RSelect: for every input array of
+
+phase j -> array size between (3/4)^(j+1)*n and (3/4)^j*n
+
+X_j is number of recursive calls during phase j
+
+this makes it easier to sum up the calls in each phase.
+
+roughly how many cuts does a graph with n vertices have?
+
+so that means for each point it is either in A or B.
+
+2^n
+
+strictly 2^n - 1, since the ones with empty set do not count.
+
+fewest number of crossing edges
+
+parallel edges are those that go between the exact same vertices.
+
+application is to see where there is a hotspot in the network, where it is the most critical or vulnerable
+
+most important way to disrupt another country's transportation networks
+
+image segmentation. 2d array of pixels from an image.
+
+edge weight of how likely 2 pixels are from a common object? the cut you identify rips off one of the objects from the other
+
+undirected graph with n vertices, no parallel edges, and is connected (in one piece) what is the max and min number of edges the graph could have?
+
+min: n-1
+max: n choose 2, or n*(n-1)/2
+
+n is number of vertices
+m is number of edges
+
+m is at least Sig(n)
+m is at most Oh(n^2)
+
+adjacency matrix requirements in terms of m and n?
+Theta(n^2)
+
+adjacency list for vertices and for edges
+
+How much space does an adjacency list representation require, as a function of the number n of vertices and the number m of edges?
+
+for the edges adjacency list, total n*(n-1)/2 with each up to 2 vertices. total n^2
+
+for the vertices adjacency list, n number of vertices, with each up to n-1 edges. total n^2
+
+wrong, it's actually Theta(m+n)
+
+Oh is upper bound
+Omega is lower bound
+Theta is both upper and lower (squeeze)
+
+random contraction algorithm - random selection of an edge, but some executions does not result in a correct answer.
+how often is the answer correct?
+
+if an edge in F is contracted at some time, algorithm will be wrong
+if an edge only in A or B gets contracted, then algorithm will be correct
+
+a sequence of likelihoods that we never contract an edge of F
+
+What is the probability that an edge crossing the minimum cut (A,B) is chosen in the first iteration
+(as a function of the number of vertices n, the number of edges m, and the number k of crossing edges)?
+
+k/m
+
+need to get number of changes in vertices each interation and not edges. edges goes down by 1, but maybe more than 1.
+every vertex has k edges incident on it, ok
+degree of each vertex is at least k
+each vertex defined a cut by itself.
+
+one cut is to take a single vertex and make it group A. so each edge out of it is an cross edge.
+sum of degrees of nodes are at most 2 times number of vertices.
+every degree on left side is at least kn,
+
+number of edges is equal to size of crossing cut, times number of vertices, divided by 2.
+
+Pr[S_1] <= 2/n
+
+small number. then take the next step. then onto the end of all edges up to only 2
+
+Pr[~S_1 ^ ~S_2] = Pr[~S_2 | ~S_1] * Pr[~S_1]
+
+1-k/# remaining edges -> get this in terms of vertices
+
+k is the number of cuts crossing our minimum cut A, B, so any cuts in the original graph G has to have K crossing edges
+
+contraction only reduces k or keeps it the same, not increases it
+
+1/2*k(min number of edges per vertices) * (n-1) number of vertices
+
+1-2/(n-1)
+
+2/n*(n-1) success probability.
+
+success probability is not good, low probability.
+
+a non-trivial lower bound.
+
+1	2	2	6
+2	1	3	5	6
+3	2	4	7	8
+4	3	7	8
+5	1	2	6
+6	1	2	2	7
+7	3	4	6	8
+8	3	4	7
+
+1	2	2	6
+3	2	4	7	8
+4	3	7	8
+6	1	2	2	7
+7	3	4	6	8
+8	3	4	7
+2	1	1	3	6	6
+
+1	2	2	6
+3	2	4	6	8
+4	3	6	8
+6	1	2	2	6
+7	3	4	6	8
+8	3	4	6
+2	1	1	3	6	6
+
+u: ['1', '2', '2', '7']
+v: ['3', '4', '6', '8']
+i_u: 6 i_v: 7
+uv: ['1', '2', '2', '3', '4', '6', '7', '8']
+
+uv: ['6', '1', '2', '2', '3', '4', '8']
+
+['1', '2', '2', '6']
+['3', '2', '4', '6', '8']
+['4', '3', '6', '8']
+['8', '3', '4', '6']
+['2', '1', '1', '3', '6', '6']
+['6', '1', '2', '2', '3', '4', '8']
+
+u: ['3', '6', '8']
+v: ['2', '2', '6']
+i_u: 4 i_v: 1
+uv: ['2', '2', '3', '6', '6', '8']
+
+['1', '2', '2', '6']
+['3', '2', '4', '6', '8']
+['4', '3', '6', '8']
+['8', '3', '4', '6']
+['2', '4', '4', '3', '6', '6']
+['6', '1', '2', '2', '3', '4', '8']
+
+
+
+

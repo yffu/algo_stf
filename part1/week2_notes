@@ -1,0 +1,150 @@
+strassen matrix multiplication algorithm.
+
+fundamental problem of matrix multiplication.
+
+three matrices x, y, and z, all with the same dimensions n * n
+
+since we have to read the input which is n^2 and produce the output which is also n^2
+
+the best case scenario is a runtime of n^2
+
+matrix a b c d multiplied by second matrix e f g h
+
+there are n x n sums to calculate, and each of them is done by reading n rows or column entries and summing them
+
+n^3 is the runtime
+
+divide x into 4 quadrants, each of n/2 * n/2 size
+
+divide x into ABCD, y into EFGH
+
+when you multiply the blocks, they behave just as if the atomic components
+
+there are 8 products that we have to compute. 8 products with n/2 * n/2 matrices, then do the necessary four additions
+
+So this is going to take quadratic time overall
+
+the running time of this algorithm will have to be evaluated with the master method
+
+but on this kind of recursive algorithm you do 8 recursive calls, each on a subproblem with half as much dimension as what you started with
+
+then do quadratic time outside it will be cubic running time
+
+can we reduce the number of recursive calls from 8 to something lower? that is where Strassen's algorithm comes in
+
+step 1 - recursively compute only 7 cleverly chosen products
+
+step 2 - recursively compute the products of x and y
+
+huge win in reducing the number of recursive calls from 8 to 7
+
+only reduces by 12.5 percent, but the effect is amplified as we do one less recursive call over and over again
+
+it's better than n cubic time
+
+the products will be P1 through P7 and they'll all be defined in terms of the blocks of the input matrices x and y
+
+x in terms of blocks A B C D and y in terms of blocks E F G H
+
+just from these 7 products we can using addition and subtraction recover all 4 of the blocks of x times y
+
+there are equivalences in the matrix formed by the blocks of 7 sums versus those in the matrix formed by the 4 quadrants of x and y
+
+expand out P5 + P4 + P2 + P6
+
+The Master Method
+
+a recurrence then is a way to express T(n) in terms of the work done by its recursive calls
+
+it has a base case describing the running time when there is no further recursion
+
+then work in terms of 2 pieces, work done in recursive call and work done outside recursive call
+
+T(n) <= 4 * T(n/2) + O(n) work done outside the recursive call which is linear in terms of number of digits
+
+algorithm 2 computes the quantities with 3 terms instead of 4
+
+T(n) <= 3 * T(n/2) + O(n) for the Gauss case
+
+what would be the recurrence of mergesort? it would almost be identical to this case except we would have a 2 multiple instead of 3
+
+we can use recurrence to compare if an algorithm is faster or slower than another, although we have no exact idea of the speed
+
+master method assumes that all subproblems are of the same size
+
+there is the base case and there is for larger n
+
+T(n) <= aT(n/b) + O(n^d) where
+
+a = number of recursive calls (>=1)
+b = input size shrinking factor (> 1)
+d = exponents in summing time of combine step
+
+[a, b, d independent of n]
+
+T(n) has 3 cases:
+
+if a = b^d, then O(n^d*log(n))
+if a < b^d, then O(n^d) -> dominated by the work outside the recursion
+if a > b^d, then O(n^(log_b(a))
+
+there are only upper bounds, if you strengthen the hypothesis
+
+there is no log base in the first case
+
+in the second case it matters, since the logarithm term is in the exponent
+
+master method take recurrence of form
+
+T(n) <= a*T(n/b) + O(n^d)
+
+a is number of recursive calls, b is the factor by which the subproblem size is smaller than the original problem size
+
+example 1 - mergesort
+
+a = 2; b = 2; d = 1 (outside of recursion the work is merge done in linear time)
+
+a = 2 and b ^ b= 2, so case 1
+
+T(n) <= O(n^d * log(n)) = O(n * log(n))
+
+for binary search,
+
+number of recursive calls is: 1, either left or right half
+factor by which the subproblem size is reduced: 2, since we continue looking in either left or right half
+work done outside the recursion: constant time so n^0
+
+a = 1, b = 2, d = 0
+
+for the naive multiplication without Gauss's trick
+
+a = 4, b = 2, d = 1 (multiplication and addition, on length of n)
+
+T(n) = O(n* log_b(a)) = O(n*log_2(4)) = O(2)
+
+with Gauss's trick the factors are:
+
+a = 3, b = 2, d = 1
+
+b^d = 2, and a > b^d O(n^log_2(3)) = O(n^1.59)
+
+Strassen's matrix multiplication problem:
+
+a = 7, b = 2, d = 2 (n^2) work with each step outside recursion steps
+
+T(n) = O(n^log_2(7)) = O(n^2.81)
+
+Fictitious recurrence
+
+T(n) <= 2 * T(n/2) +O(n^2)
+
+b^d = 4 > a (Case 2)
+
+T(n) = O(n^2)
+
+Master Method Proof
+
+remember the setup of the 3 cases, and you don't need to memorize the derivations
+
+
+
