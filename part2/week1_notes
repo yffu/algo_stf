@@ -1,1 +1,51 @@
 topological sort for depth first search, dfs.
+
+order of the vertices.  s w v t or s v w t
+
+a labelling f of g nodes such that the f(v)'s are the set {1, 2, .., n}
+
+(u, v) element of G => f(u)<f(v)
+
+precedence constraints.
+
+directed graph should not have a directed cycle.
+
+G have directed cycle => no topological ordering.
+
+if you don't have a cycle do you have a topological ordering? yes and you can even compute one in linear time via DFS.
+
+every directed acyclic has a sink vertex, which is without any outgoing arcs.
+
+why does directed acyclic have to have a sink vertex? if every vertex had at least one outgoing arc, then
+
+start at an outgoing arc and follow it, for n vertices and n+1 vertices for n arcs, you will see a repeat.
+
+a repeated vertex means a directed cycle.
+
+you can't go back in the arc ordering. node in the final position,
+
+no sink node last means this is a directed cycle.
+
+if does have a topological ordering, think about the vertex that goes last in the ordering.
+
+every arc needs to go forward in the ordering, otherwise it's a violation of the directed cycle.
+
+any vertex which has an outgoing arc should be put somewhere other than the final position. if it's final then it will go back to a vertex that had already been seen.
+
+only candidate for final vertex in the ordering are the sink vertices.
+
+v is a sink vertx of g. v's label is the max possible, and recurse on the rest of the graph.
+
+set f(v) = n, recurse on G-{v}
+
+make sure at each step there is a sink vertex.
+
+in every iteration, we need to find a sink vertex. if you have a directed acyclic graph and delete one vertex from it,
+
+it will still be directed acyclic, you can't create a directed cyclic by removing vertices.
+
+head of the arc is always ahead of the tail of the arc.
+
+keep popping off sink vertices and place the nodes from left to right.
+
+for every edge (s,v): if v not yet explored then  
